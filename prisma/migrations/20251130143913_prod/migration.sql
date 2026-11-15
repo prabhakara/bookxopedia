@@ -1,9 +1,10 @@
 -- CreateTable
 CREATE TABLE "Genre" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "icon" TEXT NOT NULL,
-    "showOnMenu" BOOLEAN NOT NULL DEFAULT false
+    "showOnMenu" BOOLEAN NOT NULL DEFAULT false,
+    CONSTRAINT "Genre_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex

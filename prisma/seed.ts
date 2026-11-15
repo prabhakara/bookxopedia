@@ -1,29 +1,56 @@
-// prisma/seed.ts
-import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
+import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '../lib/generated/prisma/client';
-import * as fs from 'fs';
-import * as path from 'path';
-const adapter = new PrismaBetterSqlite3({
-  url: process.env.DATABASE_URL,
-});
+
+const databaseUrl = process.env.DATABASE_URL;
+
+if (!databaseUrl) {
+  throw new Error('DATABASE_URL must be set to connect to PostgreSQL.');
+}
+
+const adapter = new PrismaPg({ connectionString: databaseUrl });
 
 const prisma = new PrismaClient({
   adapter,
 });
 
+const genres = [
+  { name: 'Art', icon: 'Film', showOnMenu: false },
+  { name: 'Biography', icon: 'UserPen', showOnMenu: true },
+  { name: 'Business', icon: 'BriefcaseBusiness', showOnMenu: false },
+  { name: 'Children', icon: 'Baby', showOnMenu: false },
+  { name: 'Finance', icon: 'Coins', showOnMenu: false },
+  { name: 'Comics', icon: 'Smile', showOnMenu: false },
+  { name: 'Cooking', icon: 'CookingPot', showOnMenu: false },
+  { name: 'Thriller', icon: 'HatGlasses', showOnMenu: true },
+  { name: 'Engineering', icon: 'ToolCase', showOnMenu: false },
+  { name: 'Entertainment', icon: 'TvMinimalPlay', showOnMenu: false },
+  { name: 'Fantasy', icon: 'Sparkles', showOnMenu: false },
+  { name: 'Fiction', icon: 'Rocket', showOnMenu: true },
+  { name: 'Drama', icon: 'Drama', showOnMenu: false },
+  { name: 'Health', icon: 'Cross', showOnMenu: false },
+  { name: 'History', icon: 'NotebookPen', showOnMenu: true },
+  { name: 'Horror', icon: 'Skull', showOnMenu: false },
+  { name: 'Religion', icon: 'Tent', showOnMenu: false },
+  { name: 'Romance', icon: 'BookHeart', showOnMenu: true },
+  { name: 'Science', icon: 'Microscope', showOnMenu: false },
+  { name: 'Sports', icon: 'Volleyball', showOnMenu: false },
+  { name: 'Technology', icon: 'Cpu', showOnMenu: false },
+  { name: 'Travel', icon: 'BriefcaseConveyorBelt', showOnMenu: false },
+  { name: 'Education', icon: 'GraduationCap', showOnMenu: false },
+  { name: 'Psychology', icon: 'Brain', showOnMenu: false },
+  { name: 'Medical', icon: 'BriefcaseMedical', showOnMenu: false },
+];
+
 async function main() {
-  const sqlFilePath = path.join(__dirname, 'seed.sql');
-  const sql = fs.readFileSync(sqlFilePath, 'utf-8');
-
-  // Split SQL into individual statements if necessary,
-  // as $executeRaw typically handles a single statement at a time.
-  // For simple cases with multiple INSERTs, you might need to iterate.
-  const statements = sql.split(';').filter((s) => s.trim() !== '');
-
-  for (const statement of statements) {
-    await prisma.$executeRawUnsafe(statement); // Use $executeRaw for parameterized queries
+  for (const genre of genres) {
+    await prisma.genre.upsert({
+      where: { name: genre.name },
+      update: genre,
+      create: genre,
+    });
   }
-  console.log('Database seeded successfully with raw SQL.');
+
+  console.log('Database seeded successfully with genres.');
 }
 
 main()

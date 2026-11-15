@@ -1,10 +1,10 @@
 # Bookxopedia
 
-Bookxopedia is a Next.js app powered by the Google Books API and a local SQLite database.
+Bookxopedia is a Next.js app powered by the Google Books API and a PostgreSQL database.
 
 ## Setup
 
-Use Node.js 22.x, which is supported by Prisma and the SQLite native driver.
+Use Node.js 22.x and a PostgreSQL database.
 
 1. Install dependencies:
 
@@ -13,9 +13,8 @@ Use Node.js 22.x, which is supported by Prisma and the SQLite native driver.
    ```
 
 2. Copy `.env.example` to `.env` (on Windows PowerShell, run
-   `Copy-Item .env.example .env`) and set `NEXT_PUBLIC_BOOKS_API_KEY` to a
-   Google Books API key. `DATABASE_URL` can remain set to `file:./data.db` for
-   local development.
+   `Copy-Item .env.example .env`) and set `DATABASE_URL` to your PostgreSQL
+   connection string and `NEXT_PUBLIC_BOOKS_API_KEY` to a Google Books API key.
 
 3. Generate the Prisma client, create the database, and seed the genres:
 
@@ -43,10 +42,12 @@ npm run build
 npm start
 ```
 
-The build generates Prisma Client, applies pending migrations, seeds the genre
-list, and builds the app. Book data is fetched when the pages are requested, so
-a valid Google Books API key must be configured before building and running the
-app. To use a non-default port, run `npm start -- -p 3001`.
+The build generates Prisma Client, applies pending PostgreSQL migrations, seeds
+the genre list, and builds the app. Configure `DATABASE_URL` and
+`NEXT_PUBLIC_BOOKS_API_KEY` in Vercel's environment variables before deploying.
+Book data is fetched when the pages are requested, so a valid Google Books API
+key must be configured before building and running the app. To use a non-default
+port, run `npm start -- -p 3001`.
 
 ## Learn more
 
