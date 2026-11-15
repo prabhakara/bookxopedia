@@ -2,6 +2,9 @@
   "name": "bookxopedia",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "dev": "next dev",
     "prebuild": "npx prisma generate && npx prisma migrate deploy",

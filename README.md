@@ -4,6 +4,8 @@ Bookxopedia is a Next.js app powered by the Google Books API and a local SQLite 
 
 ## Setup
 
+Use Node.js 22.x, which is supported by Prisma and the SQLite native driver.
+
 1. Install dependencies:
 
    ```sh
