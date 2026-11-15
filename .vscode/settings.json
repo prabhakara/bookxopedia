@@ -9,5 +9,8 @@
     "source.fixAll.stylelint": "never",
     "source.organizeImports": "never"
   },
-  "editor.defaultFormatter": "esbenp.prettier-vscode"
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "DockerRun.DisableDockerrc": true,
+  "vscode.tsc.compiler.alertTSConfigChanges": "never",
+  "vscode.tsc.compiler.alertOnError": "never"
 }
