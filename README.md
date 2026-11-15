@@ -42,9 +42,9 @@ npm start
 ```
 
 The build generates Prisma Client, applies pending migrations, seeds the genre
-list, and builds the app. A valid Google Books API key is needed because book
-pages fetch API data during the build. To use a non-default port, run
-`npm start -- -p 3001`.
+list, and builds the app. Book data is fetched when the pages are requested, so
+a valid Google Books API key must be configured before building and running the
+app. To use a non-default port, run `npm start -- -p 3001`.
 
 ## Learn more
 

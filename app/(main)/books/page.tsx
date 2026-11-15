@@ -2,6 +2,8 @@ import BookListCarousel from '@/components/BookListCarousel';
 import { BOOKS_NAVIGATION_LINKS } from '@/constants';
 import { getBooksList } from '@/service';
 
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
   const popularBooks = await getBooksList({ q: 'subject:romance' });
   const latestBooks = await getBooksList({ orderBy: 'newest' });

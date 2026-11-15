@@ -10,10 +10,22 @@ type BooksFilter = {
   filter?: string;
 };
 
+const getApiKey = () => {
+  const apiKey = process.env.NEXT_PUBLIC_BOOKS_API_KEY?.trim();
+  if (!apiKey || apiKey === 'replace_with_your_google_books_api_key') {
+    throw new ApiError(
+      'Set a valid Google Books API key in NEXT_PUBLIC_BOOKS_API_KEY.',
+      400
+    );
+  }
+  return apiKey;
+};
+
 export const getBooksList = async (
   searchParams?: BooksFilter | undefined
 ): Promise<IBookResponse> => {
   try {
+    const apiKey = getApiKey();
     const url = new URL(GOOGLE_BOOKS_API_BASE_URL);
     const queryTerm = !searchParams?.q
       ? searchParams?.orderBy === 'newest'
@@ -32,9 +44,8 @@ export const getBooksList = async (
       params['filter'] = searchParams?.filter ?? 'partial';
     }
     url.search = new URLSearchParams(params).toString();
-    const response = await fetch(
-      `${url}&key=${process.env.NEXT_PUBLIC_BOOKS_API_KEY}`
-    );
+    url.searchParams.set('key', apiKey);
+    const response = await fetch(url);
     if (!response.ok) {
       if (response.status === 429) {
         throw new ApiError('Rate limit exceeded', 429);
@@ -50,10 +61,10 @@ export const getBooksList = async (
 
 export const getBookDetails = async (volumeId: string): Promise<IBook> => {
   try {
+    const apiKey = getApiKey();
     const url = new URL(`${GOOGLE_BOOKS_API_BASE_URL}/${volumeId}`);
-    const response = await fetch(
-      `${url}?key=${process.env.NEXT_PUBLIC_BOOKS_API_KEY}`
-    );
+    url.searchParams.set('key', apiKey);
+    const response = await fetch(url);
     if (!response.ok) {
       if (response.status === 429) {
         throw new ApiError('Rate limit exceeded', 429);
